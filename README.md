@@ -1,6 +1,6 @@
 # vhp-golang-campaign-5
 
-## Understand more:
+## Practice Intermediate technical knowledge:
 
 ### Generic: 
 - Types parameter
