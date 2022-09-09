@@ -3,6 +3,7 @@ package pkg
 import (
 	"fmt"
 	"math/rand"
+	"runtime"
 	"time"
 )
 
@@ -54,10 +55,19 @@ func Fibonacci(c, quit chan int) {
 	for {
 		select {
 		case c <- x:
-			x, y = y, x+y
+			x, y = y, y+x
 		case <-quit:
 			fmt.Println("quit")
 			return
 		}
 	}
 }
+
+func Sender(c chan<- int, name string) {
+	for i := 1; i <= 100; i++ {
+		c <- 1
+		fmt.Printf("%s has sent 1 to channel\n", name)
+		runtime.Gosched()
+	}
+}
+
