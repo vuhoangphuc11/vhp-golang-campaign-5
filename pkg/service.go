@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 	"runtime"
+	"sync"
 	"time"
 )
 
@@ -71,3 +72,66 @@ func Sender(c chan<- int, name string) {
 	}
 }
 
+func Publisher() <-chan int {
+	c := make(chan int)
+
+	go func() {
+		for i := 1; i <= 1000; i++ {
+			c <- 1
+		}
+		close(c)
+	}()
+
+	return c
+}
+
+func Consumer(c <-chan int, name string) {
+	counter := 0
+
+	for value := range c {
+		fmt.Printf("Consumer %s is doing task %d\n", name, value)
+		counter++
+		time.Sleep(time.Millisecond * 20)
+	}
+
+	fmt.Printf("Consumer %s has finished %d task(s)\n", name, counter)
+}
+
+func StreamNumbers(numbers ...int) <-chan int {
+	c := make(chan int)
+
+	go func() {
+		for n := range numbers {
+			c <- n
+		}
+
+		close(c)
+	}()
+
+	return c
+}
+
+func SumAllStreams(streams ...<-chan int) <-chan int {
+	sumChan := make(chan int)
+	counter := 0
+	wc := new(sync.WaitGroup)
+
+	wc.Add(len(streams))
+
+	for i := 0; i < len(streams); i++ {
+		go func(s <-chan int) {
+			for n := range s {
+				counter += n
+			}
+			wc.Done()
+		}(streams[i])
+	}
+
+	go func() {
+		wc.Wait()
+		sumChan <- counter
+	}()
+
+	return sumChan
+
+}

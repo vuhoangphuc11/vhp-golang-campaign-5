@@ -2,7 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/vuhoangphuc11/vhp-golang-campaign-5/pkg"
+	"runtime"
+	"time"
 )
 
 func main() {
@@ -13,6 +14,7 @@ func main() {
 	//VHP select channel
 	//pkg.SelectChannel()
 
+	//VHP Fibonacci
 	//c := make(chan int)
 	//quit := make(chan int)
 	//go func() {
@@ -24,21 +26,56 @@ func main() {
 	//
 	//pkg.Fibonacci(c, quit)
 
-	myChan := make(chan int)
+	//VHP Use 1 channel to listen to data from many places
+	//myChan1 := make(chan int)
+	//
+	//go pkg.Sender(myChan1, "S1")
+	//go pkg.Sender(myChan1, "S2")
+	//go pkg.Sender(myChan1, "S3")
+	//
+	//start := 0
+	//
+	//for {
+	//	start += <-myChan1
+	//	fmt.Println(start)
+	//
+	//	if start >= 300 {
+	//		break
+	//	}
+	//}
 
-	go pkg.Sender(myChan, "S1")
-	go pkg.Sender(myChan, "S2")
-	go pkg.Sender(myChan, "S3")
+	//VHP Load balancing with Channel
+	//myChan2 := pkg.Publisher()
+	//maxConsumer := 5
+	//
+	//for i := 1 ; i <= maxConsumer ; i++ {
+	//	go pkg.Consumer(myChan2, fmt.Sprintf("%d", i))
+	//}
+	//
+	//time.Sleep(time.Second * 10)
 
-	start := 0
+	//VHP merge channel using waitgroup and channel
+	//s := pkg.SumAllStreams(
+	//	pkg.StreamNumbers(1, 2, 3, 4, 5),
+	//	pkg.StreamNumbers(8, 8, 3, 3, 10, 12, 14),
+	//	pkg.StreamNumbers(1, 1, 2, 2, 4, 4, 6),
+	//)
+	//
+	//fmt.Println(<-s)
 
-	for {
-		start += <-myChan
-		fmt.Println(start)
-
-		if start >= 300 {
-			break
+	go func() {
+		for i := 0 ; i <= 20 ; i ++ {
+			fmt.Println("Goroutine 2")
+			runtime.Gosched()
 		}
-	}
+	}()
 
+	go func() {
+		for i := 0 ; i <= 20 ; i ++ {
+			fmt.Println("Goroutine 1")
+			runtime.Gosched()
+		}
+	}()
+
+	time.Sleep(time.Second)
 }
