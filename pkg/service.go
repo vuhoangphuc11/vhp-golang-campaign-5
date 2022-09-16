@@ -133,5 +133,53 @@ func SumAllStreams(streams ...<-chan int) <-chan int {
 	}()
 
 	return sumChan
-
 }
+
+//func Solutions(n []int) {
+//	if CheckValue(n) == false {
+//		return
+//	}
+//	var sl []int
+//	var arr []int
+//	s := 0
+//
+//	for j := 0 ; j < len(n) ; j++ {
+//		for i := 0; i < len(n); i++ {
+//			if  s == i {
+//				continue
+//			}
+//			if s == len(n)-1 {
+//				break
+//			}
+//			if n[s] == n[i] {
+//				sl = n[s : i+1]
+//				su := sum(sl)
+//				arr = append(arr,su)
+//			}
+//		}
+//		if s == len(n)-1 {
+//			fmt.Println(-1)
+//			break
+//		}
+//		s++
+//	}
+//
+//	sort.Ints(arr)
+//	fmt.Println(arr[0])
+//
+//}
+//
+//func CheckValue(n []int) bool {
+//	if len(n) < 2 || len(n) > 100000 {
+//		return false
+//	}
+//	return true
+//}
+//
+//func sum(array []int) int {
+//	result := 0
+//	for _, v := range array {
+//		result += v
+//	}
+//	return result
+//}
